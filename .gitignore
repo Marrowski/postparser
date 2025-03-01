@@ -102,3 +102,4 @@ ENV/
 
 *.db
 *.npy
+test.py

@@ -6,7 +6,7 @@ ApplicationWindow
     id: window
     title: qsTr("Парсер для пошти України")
     width: 1000
-    height: 500
+    height: 800
     color: "gray"
     visible: true
 
@@ -35,6 +35,7 @@ ApplicationWindow
     TextField{
         id: cityInput
         placeholderText: "Введіть ваше місто..."
+        onTextChanged: mainApp.set_user_input(text)
         width: 500
         height: 100
         font.pixelSize: 21
@@ -43,10 +44,28 @@ ApplicationWindow
         anchors.topMargin:5
     }
     Button{
+        id: findButton
         text: "Знайти"
-        on_clicked: mainApp.get_data()
+        onClicked: mainApp.get_data()
         anchors.horizontalCenter: cityInput.horizontalCenter
         anchors.top: cityInput.bottom
         anchors.topMargin: 10
+    }
+
+    Text{
+        id:cityOutput
+        text: mainApp.response_text
+        font.pixelSize: 14
+        width: 700
+        height: 200
+        wrapMode: Text.WordWrap
+        anchors.horizontalCenter: findButton.horizontalCenter
+        anchors.top: findButton.bottom
+        anchors.topMargin:10
+    }
+
+    Connections {
+        target: mainApp
+        onData_upd: cityOutput.text = mainApp.response_text
     }
 }
