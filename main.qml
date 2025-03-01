@@ -52,17 +52,39 @@ ApplicationWindow
         anchors.topMargin: 10
     }
 
-    Text{
-        id:cityOutput
-        text: mainApp.response_text
-        font.pixelSize: 14
-        width: 700
-        height: 200
-        wrapMode: Text.WordWrap
-        anchors.horizontalCenter: findButton.horizontalCenter
-        anchors.top: findButton.bottom
-        anchors.topMargin:10
-    }
+    ScrollView {
+    width: 700
+    height: 300
+    anchors.horizontalCenter: findButton.horizontalCenter
+    anchors.top: findButton.bottom
+    anchors.topMargin: 10
+
+        ListView {
+            id: cityOutput
+            model: mainApp.response_list
+            delegate: Item {
+                width: cityOutput.width
+                height: 80
+
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: "white"
+                    radius: 5
+                    border.color: "black"
+
+                    Text {
+                        text: modelData
+                        wrapMode: Text.WordWrap
+                        font.pixelSize: 14
+                        anchors.fill: parent
+                        anchors.margins: 5
+                    }
+                }
+            }
+        }
+}
+
 
     Connections {
         target: mainApp

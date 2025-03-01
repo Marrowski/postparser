@@ -19,9 +19,14 @@ class MainApplication(QObject):
         super().__init__()
         self._city_input = ""
         self._response_text = 'Введіть ваше місто...'
-        self._response_data = {}        
+        self._response_list = []     
         
         
+    @pyqtProperty("QVariantList", notify=data_upd)
+    def response_list(self):
+        return self._response_list
+    
+            
     @pyqtProperty(str, notify=data_upd)
     def response_text(self):
         return self._response_text
@@ -51,16 +56,17 @@ class MainApplication(QObject):
             response = requests.post(url, json=data)
             self._response_data = response.json()
             
+            self._response_list = []
+            
             if "data" in self._response_data and self._response_data['data']:
                 results = []
                 for data in self._response_data and self._response_data['data']:
                     desc = data['Description']
                     address = data['ShortAddress']
                     number = data['Number']
-                    results.append(f'Тип:{desc}\nАдреса:{address}\nНомер відділення:{number}')
-                    print(results)
+                    self._response_list.append(f"Тип: {desc}\nАдреса: {address}\nНомер відділення: {number}")
             else:
-                self._response_text = 'Не знайдено відділень за вашим запитом.'       
+                self._response_list = 'Не знайдено відділень за вашим запитом.'       
                     
         except requests.RequestException as e:
             self._response_text = f'Помилка у знаходжені міста: {e}'
